@@ -802,12 +802,41 @@ class BlueZBattery extends DBusObject {
 
 /// A GATT service running on a BlueZ device.
 class BlueZGattService {
-  final String _serviceInterfaceName = 'org.bluez.GattService1';
+  static const String _serviceInterfaceName = 'org.bluez.GattService1';
 
   final BlueZClient _client;
   final _BlueZObject _object;
 
   BlueZGattService(this._client, this._object);
+
+  static Future<BlueZGattService> create(BlueZClient client) async {
+
+    final bus = DBusClient.system();
+    final root = DBusRemoteObjectManager(bus,
+        name: 'org.bluez', path: DBusObjectPath('/'));
+
+
+    // Find all the objects exported.
+    var objects = await root.getManagedObjects();
+    Map<String, Map<String, DBusValue>>?  interfaces;
+    objects.forEach((objectPath, interfacesAndProperties) {
+      print(objectPath);
+      if (objectPath.isInNamespace(DBusObjectPath(_serviceInterfaceName))) {
+        interfaces = interfacesAndProperties;
+        return;
+      }
+    });
+
+    if (interfaces == null) {
+      throw 'Missing /org/bluez object required for agent registration';
+    }
+
+    final object = _BlueZObject(bus, DBusObjectPath(_serviceInterfaceName), interfaces!);
+    // await object.setProperty(
+    //     , 'Trusted', DBusBoolean(value));
+
+    return BlueZGattService(client, object);
+  }
 
   // TODO(robert-ancell): Includes
 
