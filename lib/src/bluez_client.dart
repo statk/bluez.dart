@@ -815,6 +815,7 @@ class BlueZGattService {
     final root = DBusRemoteObjectManager(bus,
         name: 'org.bluez', path: DBusObjectPath('/'));
 
+    print('Getting GattService');
 
     // Find all the objects exported.
     var objects = await root.getManagedObjects();
