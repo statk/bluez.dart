@@ -821,7 +821,7 @@ class BlueZGattService {
     Map<String, Map<String, DBusValue>>?  interfaces;
     objects.forEach((objectPath, interfacesAndProperties) {
       print(objectPath);
-      if (objectPath.isInNamespace(DBusObjectPath(_serviceInterfaceName))) {
+      if (objectPath.isInNamespace(DBusObjectPath('/org/bluez/GattService1'))) {
         interfaces = interfacesAndProperties;
         return;
       }
