@@ -832,7 +832,7 @@ class BlueZGattService {
       throw 'Missing /org/bluez object required for agent registration';
     }
 
-    final object = _BlueZObject(bus, DBusObjectPath(_serviceInterfaceName), interfaces!);
+    final object = _BlueZObject(bus, DBusObjectPath('/org/bluez/GattService1'), interfaces!);
     // await object.setProperty(
     //     , 'Trusted', DBusBoolean(value));
 
