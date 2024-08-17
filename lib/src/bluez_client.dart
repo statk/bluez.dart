@@ -816,13 +816,13 @@ class BlueZGattService {
         name: 'org.bluez', path: DBusObjectPath('/'));
     DBusObjectPath? servicePath;
 
-    print('Getting GattService');
+    print('<<<<<<<<Getting GattService>>>>>>>>');
 
     // Find all the objects exported.
     var objects = await root.getManagedObjects();
     Map<String, Map<String, DBusValue>>?  interfaces;
     objects.forEach((objectPath, interfacesAndProperties) {
-      print(objectPath);
+      print('<<<<<<<<objectPath: $objectPath>>>>>>>>');
       if (interfacesAndProperties.containsKey(_serviceInterfaceName)) {
         interfaces = interfacesAndProperties;
         servicePath = objectPath;
@@ -833,6 +833,8 @@ class BlueZGattService {
     if (interfaces == null) {
       throw 'Missing /org/bluez object required for agent registration';
     }
+    
+    print('<<<ServicePath: $servicePath>>>>>>>>');
     
     final object = _BlueZObject(bus, servicePath!, interfaces!);
     // await object.setProperty(
