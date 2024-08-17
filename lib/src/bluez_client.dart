@@ -814,6 +814,7 @@ class BlueZGattService {
     final bus = DBusClient.system();
     final root = DBusRemoteObjectManager(bus,
         name: 'org.bluez', path: DBusObjectPath('/'));
+    DBusObjectPath? servicePath;
 
     print('Getting GattService');
 
@@ -822,8 +823,9 @@ class BlueZGattService {
     Map<String, Map<String, DBusValue>>?  interfaces;
     objects.forEach((objectPath, interfacesAndProperties) {
       print(objectPath);
-      if (objectPath.isInNamespace(DBusObjectPath('/org/bluez/GattService1'))) {
+      if (interfacesAndProperties.containsKey(_serviceInterfaceName)) {
         interfaces = interfacesAndProperties;
+        servicePath = objectPath;
         return;
       }
     });
@@ -831,8 +833,8 @@ class BlueZGattService {
     if (interfaces == null) {
       throw 'Missing /org/bluez object required for agent registration';
     }
-
-    final object = _BlueZObject(bus, DBusObjectPath('/org/bluez/GattService1'), interfaces!);
+    
+    final object = _BlueZObject(bus, servicePath!, interfaces!);
     // await object.setProperty(
     //     , 'Trusted', DBusBoolean(value));
 
