@@ -811,6 +811,7 @@ class BlueZGattService {
 
   static Future<BlueZGattService> create(BlueZClient client) async {
 
+    print('<<<<<<<<creating service>>>>>>>>');
     final bus = DBusClient.system();
     final root = DBusRemoteObjectManager(bus,
         name: 'org.bluez', path: DBusObjectPath('/'));
